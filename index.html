@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mohammed — Frontend Developer</title>
+    <meta
+      name="description"
+      content="Frontend developer building interfaces and the small tools underneath them — Electron apps, CLI utilities, and web builds with HTML, CSS, JavaScript and Node."
+    />
+    <meta name="theme-color" content="#14171C" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Mohammed — Frontend Developer" />
+    <meta
+      property="og:description"
+      content="Frontend developer building interfaces and the small tools underneath them — Electron apps, CLI utilities, and web builds with HTML, CSS, JavaScript and Node."
+    />
+    <meta property="og:url" content="https://shena9y.github.io/portfolio/" />
+    <meta
+      property="og:image"
+      content="https://shena9y.github.io/portfolio/og-image.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Mohammed — Frontend Developer" />
+    <meta
+      name="twitter:description"
+      content="Frontend developer building interfaces and the small tools underneath them."
+    />
+    <meta
+      name="twitter:image"
+      content="https://shena9y.github.io/portfolio/og-image.png"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <div class="nav-mark"><span class="dot"></span>Mohammed</div>
+        <div class="nav-links">
+          <a href="#about">About</a>
+          <a href="#work">Work</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <canvas id="wallpaper"></canvas>
+      <div class="hero-inner">
+        <div class="hero-label">
+          <span class="rule"></span>frontend developer
+        </div>
+        <h1 class="hero-title">
+          I build interfaces,
+          <em>and the small tools that run underneath them.</em>
+        </h1>
+        <p class="hero-sub">
+          HTML, CSS and JavaScript for the front end — Node and Electron for the
+          tools nobody sees. I like projects with a working part: a queue, a
+          hotkey, a signal moving from one place to another.
+        </p>
+        <div class="hero-cta">
+          <a href="#work" class="btn btn-primary">View work</a>
+          <a href="#contact" class="btn btn-ghost">Get in touch</a>
+        </div>
+      </div>
+      <div class="hero-meter mono">move the cursor —— signal responds</div>
+    </section>
+
+    <section id="about">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="tag">about</div>
+            <h2>How I work</h2>
+          </div>
+          <div class="section-index">01</div>
+        </div>
+
+        <div class="about-grid">
+          <div class="about-body">
+            <p>
+              I'm a front-end developer who ends up building more than front
+              ends. Most projects start as a browser interface and then grow a
+              second half — a CLI, a desktop shell, a background service —
+              because the interesting part of the problem was never just the
+              layout.
+            </p>
+            <p>
+              Recent work spans client sites and challenge builds, alongside
+              Electron apps and Node tools built for my own workflow: a
+              queue-based download manager, a CLI wrapper around it, and a
+              couple of small Windows utilities that started as "I wish this
+              existed."
+            </p>
+            <p>
+              I care about interfaces that respond precisely — correct states,
+              accessible focus, motion that means something — and about the
+              plumbing behind them being just as considered.
+            </p>
+          </div>
+
+          <div class="about-channels">
+            <div class="channel">
+              <div class="channel-head">
+                <span class="name">Frontend</span><span class="name">core</span>
+              </div>
+              <div class="channel-bar"><span style="width: 92%"></span></div>
+              <div class="channel-tags">
+                <span>HTML</span><span>CSS</span><span>JavaScript</span
+                ><span>Bootstrap</span>
+              </div>
+            </div>
+            <div class="channel">
+              <div class="channel-head">
+                <span class="name">Desktop &amp; CLI</span
+                ><span class="name">applied</span>
+              </div>
+              <div class="channel-bar"><span style="width: 74%"></span></div>
+              <div class="channel-tags">
+                <span>Node.js</span><span>Electron</span><span>yt-dlp</span
+                ><span>Python</span>
+              </div>
+            </div>
+            <div class="channel">
+              <div class="channel-head">
+                <span class="name">Systems</span
+                ><span class="name">tinkering</span>
+              </div>
+              <div class="channel-bar"><span style="width: 58%"></span></div>
+              <div class="channel-tags">
+                <span>Deployment</span><span>Windows internals</span
+                ><span>Audio routing</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="work">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="tag">selected work</div>
+            <h2>Projects</h2>
+          </div>
+          <div class="section-index">02</div>
+        </div>
+
+        <div class="project">
+          <div class="project-meta">
+            <span class="kind mono">Electron app</span><br />Desktop
+          </div>
+          <div>
+            <h3>Fetchbay</h3>
+            <p>
+              A queue-based desktop download manager built with Electron, with
+              yt-dlp integration for video downloads. Cross-compiled to a
+              Windows executable from a Linux build environment.
+            </p>
+            <div class="project-links">
+              <a
+                href="https://github.com/shena9y"
+                target="_blank"
+                rel="noopener"
+                >GitHub ↗</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="project">
+          <div class="project-meta">
+            <span class="kind mono">CLI tool</span><br />Node.js
+          </div>
+          <div>
+            <h3>fetchcli</h3>
+            <p>
+              A command-line downloader that shares its core with Fetchbay —
+              same download logic, no interface, for scripting and
+              terminal-first workflows.
+            </p>
+            <div class="project-links">
+              <a
+                href="https://github.com/shena9y"
+                target="_blank"
+                rel="noopener"
+                >GitHub ↗</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="project">
+          <div class="project-meta">
+            <span class="kind mono">Frontend Mentor</span><br />HTML / CSS
+          </div>
+          <div>
+            <h3>Maison Soleil</h3>
+            <p>
+              A hotel booking landing page built around container queries and
+              clamp()-based responsive sizing, with a custom fan-effect card
+              toggle and an accessible mobile menu.
+            </p>
+            <div class="project-links">
+              <a
+                href="https://www.frontendmentor.io/profile/shena9y"
+                target="_blank"
+                rel="noopener"
+                >Frontend Mentor ↗</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="project">
+          <div class="project-meta">
+            <span class="kind mono">Frontend Mentor</span><br />Vanilla JS
+          </div>
+          <div>
+            <h3>Browser extensions manager</h3>
+            <p>
+              A JSON-driven extensions manager with theme switching and
+              persisted state via localStorage — built without a framework to
+              keep the interaction logic transparent.
+            </p>
+            <div class="project-links">
+              <a
+                href="https://www.frontendmentor.io/profile/shena9y"
+                target="_blank"
+                rel="noopener"
+                >Frontend Mentor ↗</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="project">
+          <div class="project-meta">
+            <span class="kind mono">Tray app</span><br />Python
+          </div>
+          <div>
+            <h3>Pointer-speed calculator</h3>
+            <p>
+              A system tray app for a gaming mouse with no official DPI software
+              — presets, hotkeys and a calculator built from Windows'
+              pointer-speed multipliers, with autostart.
+            </p>
+            <div class="project-links">
+              <a
+                href="https://github.com/shena9y"
+                target="_blank"
+                rel="noopener"
+                >GitHub ↗</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="wrap">
+        <div class="contact-panel">
+          <div class="contact-intro">
+            <h2>Have something to build?</h2>
+            <p>
+              Open to front-end projects and the occasional excuse to build a
+              small tool alongside one. Send a message and I'll reply from
+              there.
+            </p>
+
+            <div class="contact-links">
+              <a
+                href="https://github.com/shena9y"
+                target="_blank"
+                rel="noopener"
+                >GitHub <span>shena9y</span></a
+              >
+              <a
+                href="https://www.frontendmentor.io/profile/shena9y"
+                target="_blank"
+                rel="noopener"
+                >Frontend Mentor <span>shena9y</span></a
+              >
+            </div>
+          </div>
+
+          <form
+            class="contact-form"
+            id="contact-form"
+            action="https://formspree.io/f/xzebgnwv"
+            method="POST"
+          >
+            <div class="field">
+              <label for="cf-name">Name</label>
+              <input
+                type="text"
+                id="cf-name"
+                name="name"
+                autocomplete="name"
+                required
+              />
+            </div>
+            <div class="field">
+              <label for="cf-email">Email</label>
+              <input
+                type="email"
+                id="cf-email"
+                name="email"
+                autocomplete="email"
+                required
+              />
+            </div>
+            <div class="field">
+              <label for="cf-message">Message</label>
+              <textarea id="cf-message" name="message" required></textarea>
+            </div>
+            <!-- honeypot field: kept off-screen, real visitors never fill this in -->
+            <div class="field hp" aria-hidden="true">
+              <label for="cf-hp">Leave blank</label>
+              <input
+                type="text"
+                id="cf-hp"
+                name="_gotcha"
+                tabindex="-1"
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="form-row">
+              <button type="submit" class="btn btn-primary" id="cf-submit">
+                Send message
+              </button>
+              <span class="form-status mono" id="cf-status"></span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <footer>&copy; Built with ❤️ by Mohammed Hamdy</footer>
+    <script src="app.js"></script>
+  </body>
+</html>
