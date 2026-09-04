@@ -10,7 +10,7 @@
 
 A personal portfolio website for a frontend developer, presenting an interactive canvas hero animation, a curated project showcase, a skill overview, and a functional contact form. The site is built entirely with vanilla HTML, CSS, and JavaScript — no frameworks, no build step, no external dependencies beyond web fonts and a form-handling service.
 
-🔗 **Live site:** [shena9y.github.io/portfolio](https://shena9y.github.io/portfolio/)
+🔗 **Live site:** [👉 Here](https://shena9y.github.io/Portfolio/)
 
 ---
 
