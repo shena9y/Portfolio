@@ -6,13 +6,14 @@
   --border-soft: #23282f;
   --text: #e8e6e0;
   --text-dim: #9aa0ab;
-  --text-faint: #5c636f;
+  --text-faint: #868d9b;
   --accent: #e8933d;
   --accent-soft: rgba(232, 147, 61, 0.14);
   --accent-line: rgba(232, 147, 61, 0.35);
   --teal: #5fa8a0;
   --radius: 3px;
   --maxw: 1120px;
+  color-scheme: dark;
 }
 
 * {
@@ -24,6 +25,7 @@ html {
 
 body {
   margin: 0;
+  overflow-x: hidden;
   background: var(--bg);
   color: var(--text);
   font-family: "IBM Plex Sans", sans-serif;
@@ -66,6 +68,24 @@ a {
   outline-offset: 3px;
 }
 
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  z-index: 100;
+  background: var(--accent);
+  color: #14171c;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 10px 18px;
+  border-radius: var(--radius);
+  transition: top 0.15s ease;
+}
+.skip-link:focus {
+  top: 16px;
+}
+
 /* ---------- NAV ---------- */
 header {
   position: fixed;
@@ -73,8 +93,7 @@ header {
   left: 0;
   right: 0;
   z-index: 50;
-  background: rgba(20, 23, 28, 0.82);
-  backdrop-filter: blur(10px);
+  background: rgba(20, 23, 28, 0.92);
   border-bottom: 1px solid var(--border-soft);
 }
 nav {
@@ -91,14 +110,128 @@ nav {
   font-size: 1rem;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  cursor: pointer;
+  transition: transform 0.12s ease;
 }
-.nav-mark .dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 8px 1px var(--accent);
+.nav-mark:active {
+  transform: scale(0.94);
+}
+.logo-glyph {
+  display: block;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  filter: drop-shadow(0 0 6px rgba(232, 147, 61, 0.18));
+  transition: filter 0.3s ease;
+}
+.nav-mark:hover .logo-glyph {
+  filter: drop-shadow(0 0 9px rgba(232, 147, 61, 0.42));
+}
+.logo-track {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 1.5;
+}
+.logo-arc {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 94.25;
+  /* JS sets --arc-offset each scroll frame (fallback = empty ring). */
+  stroke-dashoffset: var(--arc-offset, 94.25px);
+}
+.logo-dot {
+  fill: var(--teal);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: logo-breathe 2.6s ease-in-out infinite;
+}
+.logo-dot-core {
+  fill: #14171c;
+}
+.logo-burst,
+.logo-ping {
+  fill: none;
+  stroke-width: 1.5;
+  opacity: 0;
+  pointer-events: none;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.logo-burst {
+  stroke: var(--accent-line);
+}
+.logo-ping {
+  stroke: var(--teal);
+  stroke-dasharray: 30 64.25;
+  stroke-dashoffset: 94.25;
+}
+.nav-mark.burst .logo-burst {
+  animation: logo-burst-ring 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.nav-mark.burst .logo-burst.burst-1 {
+  animation-delay: 0.15s;
+}
+.nav-mark.burst .logo-ping {
+  animation: logo-ping-signal 1s linear forwards;
+}
+.nav-mark.burst .logo-dot {
+  animation: logo-pop 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.logo-name {
+  transition:
+    color 0.25s ease,
+    text-shadow 0.25s ease;
+}
+.nav-mark.burst .logo-name {
+  color: var(--accent);
+  text-shadow: 0 0 14px var(--accent-soft);
+}
+
+@keyframes logo-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.22);
+  }
+}
+@keyframes logo-burst-ring {
+  0% {
+    opacity: 0.65;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+@keyframes logo-ping-signal {
+  0% {
+    opacity: 0.9;
+    stroke-dashoffset: 94.25;
+  }
+  75% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    stroke-dashoffset: -94.25;
+  }
+}
+@keyframes logo-pop {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.75);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 .nav-links {
   display: flex;
@@ -189,6 +322,8 @@ h1.hero-title em {
   transition:
     border-color 0.18s ease,
     background 0.18s ease,
+    color 0.18s ease,
+    filter 0.18s ease,
     transform 0.18s ease;
   display: inline-block;
 }
@@ -210,26 +345,25 @@ h1.hero-title em {
   color: var(--text);
 }
 
-.hero-meter {
-  position: absolute;
-  right: 32px;
-  bottom: 40px;
-  z-index: 2;
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.72rem;
-  color: var(--text-faint);
-  display: none;
-}
-@media (min-width: 900px) {
-  .hero-meter {
-    display: block;
-  }
-}
-
 /* ---------- SECTION SHELL ---------- */
 section {
   padding: 108px 0;
   position: relative;
+}
+/* Keep targeted links clear of the fixed header. */
+section[id] {
+  scroll-margin-top: 96px;
+}
+/* Skip rendering work for sections below the fold until they scroll near
+   the viewport (Lighthouse-friendly and smooths long-page scrolling). */
+#about,
+#contact {
+  content-visibility: auto;
+  contain-intrinsic-size: 800px;
+}
+#work {
+  content-visibility: auto;
+  contain-intrinsic-size: 1500px;
 }
 .section-head {
   display: flex;
@@ -389,6 +523,7 @@ section {
 .project-links a {
   color: var(--accent);
   border-bottom: 1px solid transparent;
+  transition: border-color 0.15s ease;
 }
 .project-links a:hover {
   border-color: var(--accent);
@@ -434,6 +569,7 @@ section {
   padding-bottom: 10px;
   color: var(--text);
   max-width: 340px;
+  transition: color 0.15s ease;
 }
 .contact-links a span {
   color: var(--text-faint);
@@ -476,6 +612,7 @@ section {
 .field input:focus,
 .field textarea:focus {
   border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
   outline: none;
 }
 .field textarea {
@@ -527,6 +664,57 @@ footer {
   color: var(--text-faint);
 }
 
+/* ---------- SCROLL REVEAL ---------- */
+/* Only applies once JS confirms it's running (.js on <html>), so content
+   stays visible for no-JS visitors. Reveal happens on scroll via the
+   IntersectionObserver in app.js. */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  filter: blur(4px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0s);
+}
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+  filter: blur(0);
+}
+.js .reveal-left {
+  transform: translateY(26px) translateX(-26px);
+}
+.js .reveal-right {
+  transform: translateY(26px) translateX(26px);
+}
+/* Project rows carry .reveal, which would otherwise replace their hover
+   transition entirely. Re-declare it here: the reveal properties keep their
+   stagger delays, but padding-left (the hover slide) animates instantly. */
+.js .project.reveal {
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s),
+    filter 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s),
+    padding-left 0.2s ease;
+}
+.reveal-1 {
+  --reveal-delay: 80ms;
+}
+.reveal-2 {
+  --reveal-delay: 160ms;
+}
+.reveal-3 {
+  --reveal-delay: 240ms;
+}
+.reveal-4 {
+  --reveal-delay: 320ms;
+}
+.reveal-5 {
+  --reveal-delay: 400ms;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -534,5 +722,19 @@ footer {
   * {
     animation: none !important;
     transition: none !important;
+  }
+  .js .reveal,
+  .js .reveal.is-visible {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  .nav-mark,
+  .nav-mark:active {
+    transform: none !important;
+  }
+  .logo-glyph,
+  .logo-name {
+    filter: none !important;
   }
 }
