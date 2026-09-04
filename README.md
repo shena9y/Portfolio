@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # Mohammed — Portfolio Website
 
 ![Status](https://img.shields.io/badge/status-live-success)
@@ -163,7 +163,6 @@ A project list with hover-animated rows (horizontal slide with an accent-side in
 A split panel containing an introduction, profile links (GitHub, Frontend Mentor), and a contact form (Name, Email, Message). Submissions are transmitted asynchronously via Formspree. Bots completing the hidden `_gotcha` field receive a simulated success response.
 
 ## 📁 Project Structure
-
 portfolio/
 ├── index.html # Single-page markup
 ├── style.css # Complete styling (theme, layout, responsive rules)
@@ -180,4 +179,3 @@ portfolio/
 ---
 
 ![image](og-image.png)
->>>>>>> c2440eae1eff9a63a09daa8940b3ae37540507ba
