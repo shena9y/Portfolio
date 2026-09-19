@@ -7,6 +7,8 @@ My personal portfolio site — a dark, minimalist single-page experience showcas
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
 ![Performance](https://img.shields.io/badge/Performance-Optimized-brightgreen?style=flat)
 
+🔗 **Live Demo:** [https://shena9y.github.io/Portfolio/](https://shena9y.github.io/Portfolio/)
+
 ## ✨ Features
 
 - 🎨 **Animated canvas hero** — interactive dot-grid "wallpaper" that reacts to the mouse, with `prefers-reduced-motion` support
@@ -37,6 +39,8 @@ Portfolio/
 ```
 
 ## 🚀 Getting Started
+
+**Try it live:** [https://shena9y.github.io/Portfolio/](https://shena9y.github.io/Portfolio/) — no installation needed!
 
 Static site — no build step:
 
