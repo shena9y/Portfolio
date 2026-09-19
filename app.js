@@ -1,32 +1,32 @@
-// All entry points run AFTER the first paint (double rAF) so the initial
+﻿// All entry points run AFTER the first paint (double rAF) so the initial
 // critical task stays tiny — that protects FCP/LCP on real devices.
 function bootPortfolio() {
-  (function () {
-    var canvas = document.getElementById("wallpaper");
+  (() => {
+    const canvas = document.getElementById("wallpaper");
     if (!canvas || !canvas.parentElement) {
       return;
     }
-    var ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d");
     if (!ctx) {
       return;
     }
-    var hero = canvas.parentElement;
-    var reduceMotion = window.matchMedia(
+    const hero = canvas.parentElement;
+    const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
 
-    var W, H, dpr;
-    var mouseX = -9999,
-      mouseY = -9999;
-    var targetMouseX = -9999,
-      targetMouseY = -9999;
-    var phase = 0;
+    let W, H, dpr;
+    let mouseX = -9999;
+    let mouseY = -9999;
+    let targetMouseX = -9999;
+    let targetMouseY = -9999;
+    let phase = 0;
 
-    var ROWS = 6;
-    var STEP = 16;
-    var isVisible = true;
-    var rafId = null;
-    var dotsLayer = null;
+    const ROWS = 6;
+    const STEP = 16;
+    let isVisible = true;
+    let rafId = null;
+    let dotsLayer = null;
 
     function buildDots() {
       // Pre-render the faint dot grid once per resize; the per-frame loop then
@@ -34,12 +34,15 @@ function bootPortfolio() {
       dotsLayer = document.createElement("canvas");
       dotsLayer.width = Math.max(1, Math.round(W * dpr));
       dotsLayer.height = Math.max(1, Math.round(H * dpr));
-      var dctx = dotsLayer.getContext("2d");
+      const dctx = dotsLayer.getContext("2d");
+      if (!dctx) {
+        return;
+      }
       dctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      var GAP = 72;
+      const GAP = 72;
       dctx.fillStyle = "rgba(232,147,61,0.05)";
-      for (var gx = GAP / 2; gx < W; gx += GAP) {
-        for (var gy = GAP / 2; gy < H; gy += GAP) {
+      for (let gx = GAP / 2; gx < W; gx += GAP) {
+        for (let gy = GAP / 2; gy < H; gy += GAP) {
           dctx.beginPath();
           dctx.arc(gx, gy, 1, 0, Math.PI * 2);
           dctx.fill();
@@ -60,7 +63,7 @@ function bootPortfolio() {
     }
 
     function onMove(e) {
-      var rect = canvas.getBoundingClientRect();
+      const rect = canvas.getBoundingClientRect();
       targetMouseX = e.clientX - rect.left;
       targetMouseY = e.clientY - rect.top;
     }
@@ -75,21 +78,21 @@ function bootPortfolio() {
       mouseX += (targetMouseX - mouseX) * 0.08;
       mouseY += (targetMouseY - mouseY) * 0.08;
 
-      var rowGap = H / (ROWS + 1);
+      const rowGap = H / (ROWS + 1);
 
-      for (var r = 1; r <= ROWS; r++) {
-        var baseY = rowGap * r;
+      for (let r = 1; r <= ROWS; r++) {
+        const baseY = rowGap * r;
         ctx.beginPath();
-        var first = true;
+        let first = true;
 
-        for (var x = 0; x <= W; x += STEP) {
-          var dx = x - mouseX;
-          var dy = baseY - mouseY;
-          var dist = Math.sqrt(dx * dx + dy * dy);
-          var influence = Math.max(0, 1 - dist / 260);
-          var ripple = Math.sin(x * 0.02 + phase + r) * 3;
-          var push = Math.sin(dist * 0.045 - phase * 1.4) * influence * 22;
-          var y = baseY + ripple + push;
+        for (let x = 0; x <= W; x += STEP) {
+          const dx = x - mouseX;
+          const dy = baseY - mouseY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const influence = Math.max(0, 1 - dist / 260);
+          const ripple = Math.sin(x * 0.02 + phase + r) * 3;
+          const push = Math.sin(dist * 0.045 - phase * 1.4) * influence * 22;
+          const y = baseY + ripple + push;
 
           if (first) {
             ctx.moveTo(x, y);
@@ -99,7 +102,7 @@ function bootPortfolio() {
           }
         }
 
-        var op = 0.05 + 0.03 * (r % 3);
+        const op = 0.05 + 0.03 * (r % 3);
         ctx.strokeStyle =
           r % 3 === 0
             ? "rgba(95,168,160," + op + ")"
@@ -116,7 +119,7 @@ function bootPortfolio() {
 
       // soft glow that follows the cursor over the dots
       if (mouseX > -9000 && mouseX <= W && mouseY >= 0 && mouseY <= H) {
-        var grad = ctx.createRadialGradient(
+        const grad = ctx.createRadialGradient(
           mouseX,
           mouseY,
           0,
@@ -135,21 +138,22 @@ function bootPortfolio() {
       phase += 0.012;
     }
 
-    function draw() {
+    // Reassignable: the reduced-motion branch swaps this for a static painter.
+    let draw = function drawFrame() {
       frame();
       if (isVisible) {
         rafId = requestAnimationFrame(draw);
       }
-    }
+    };
 
     window.addEventListener("resize", resize);
     hero.addEventListener("mousemove", onMove);
     hero.addEventListener("mouseleave", onLeave);
     hero.addEventListener(
       "touchmove",
-      function (e) {
+      (e) => {
         if (e.touches && e.touches[0]) {
-          var t = e.touches[0];
+          const t = e.touches[0];
           onMove({ clientX: t.clientX, clientY: t.clientY });
         }
       },
@@ -158,23 +162,21 @@ function bootPortfolio() {
 
     if (reduceMotion) {
       // draw a single static frame, no loop
-      draw = (function () {
-        return function () {
-          ctx.clearRect(0, 0, W, H);
-          if (dotsLayer) {
-            ctx.drawImage(dotsLayer, 0, 0);
-          }
-          var rowGap = H / (ROWS + 1);
-          for (var r = 1; r <= ROWS; r++) {
-            var baseY = rowGap * r;
-            ctx.beginPath();
-            ctx.moveTo(0, baseY);
-            ctx.lineTo(W, baseY);
-            ctx.strokeStyle = "rgba(232,147,61,0.06)";
-            ctx.stroke();
-          }
-        };
-      })();
+      draw = () => {
+        ctx.clearRect(0, 0, W, H);
+        if (dotsLayer) {
+          ctx.drawImage(dotsLayer, 0, 0);
+        }
+        const rowGap = H / (ROWS + 1);
+        for (let r = 1; r <= ROWS; r++) {
+          const baseY = rowGap * r;
+          ctx.beginPath();
+          ctx.moveTo(0, baseY);
+          ctx.lineTo(W, baseY);
+          ctx.strokeStyle = "rgba(232,147,61,0.06)";
+          ctx.stroke();
+        }
+      };
     } else {
       // Pause the animation loop when the hero is scrolled out of view or the
       // tab is backgrounded, so it isn't spending CPU/battery for nothing.
@@ -190,12 +192,12 @@ function bootPortfolio() {
         }
       }
 
-      var hasInteracted = false;
+      let hasInteracted = false;
 
       if ("IntersectionObserver" in window) {
-        var observer = new IntersectionObserver(
-          function (entries) {
-            var entry = entries[0];
+        const observer = new IntersectionObserver(
+          (entries) => {
+            const entry = entries[0];
             isVisible =
               entry.isIntersecting && document.visibilityState === "visible";
             if (isVisible) {
@@ -226,14 +228,14 @@ function bootPortfolio() {
       hero.addEventListener("touchstart", markInteracted, { passive: true });
       document.addEventListener("scroll", markInteracted, { passive: true });
 
-      document.addEventListener("visibilitychange", function () {
+      document.addEventListener("visibilitychange", () => {
         if (document.visibilityState === "hidden") {
           isVisible = false;
           stopLoop();
         } else {
           // Only resume if the hero is actually still on screen.
-          var rect = hero.getBoundingClientRect();
-          var onScreen = rect.bottom > 0 && rect.top < window.innerHeight;
+          const rect = hero.getBoundingClientRect();
+          const onScreen = rect.bottom > 0 && rect.top < window.innerHeight;
           if (onScreen) {
             isVisible = true;
             ensureLoop();
@@ -247,8 +249,8 @@ function bootPortfolio() {
     // static frame; for everyone else it's one animated-style frame — the loop
     // only starts once the visitor actually moves or scrolls.
     function bootCanvas() {
-      requestAnimationFrame(function () {
-        requestAnimationFrame(function () {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
           resize();
           if (reduceMotion) {
             draw();
@@ -266,19 +268,20 @@ function bootPortfolio() {
     }
   })();
 
-  (function () {
-    var form = document.getElementById("contact-form");
-    var submitBtn = document.getElementById("cf-submit");
-    var status = document.getElementById("cf-status");
+  (() => {
+    const form = document.getElementById("contact-form");
+    const submitBtn = document.getElementById("cf-submit");
+    const status = document.getElementById("cf-status");
     if (!form || !submitBtn || !status) {
       return;
     }
 
-    form.addEventListener("submit", function (e) {
+    form.addEventListener("submit", (e) => {
       e.preventDefault();
 
       // honeypot: if a bot filled this in, silently pretend to succeed
-      if (form._gotcha.value) {
+      const honeypot = form.elements.namedItem("_gotcha");
+      if (honeypot && honeypot.value) {
         status.textContent = "Message sent.";
         status.className = "form-status mono ok";
         form.reset();
@@ -295,46 +298,42 @@ function bootPortfolio() {
         body: new FormData(form),
         headers: { Accept: "application/json" },
       })
-        .then(function (res) {
+        .then((res) => {
           if (res.ok) {
             status.textContent = "Message sent — thanks, I\u2019ll reply soon.";
             status.className = "form-status mono ok";
             form.reset();
           } else {
-            return res.json().then(function (data) {
-              var msg =
+            return res.json().then((data) => {
+              const msg =
                 data && data.errors && data.errors.length
-                  ? data.errors
-                      .map(function (x) {
-                        return x.message;
-                      })
-                      .join(", ")
+                  ? data.errors.map((x) => x.message).join(", ")
                   : "Something went wrong. Try again, or email me directly.";
               status.textContent = msg;
               status.className = "form-status mono err";
             });
           }
         })
-        .catch(function () {
+        .catch(() => {
           status.textContent =
             "Network error — try again, or email me directly.";
           status.className = "form-status mono err";
         })
-        .finally(function () {
+        .finally(() => {
           submitBtn.disabled = false;
           submitBtn.textContent = "Send message";
         });
     });
   })();
   /* ---------- SCROLL REVEAL ---------- */
-  (function () {
-    var revealEls = document.querySelectorAll(".reveal");
-    var reduceMotion = window.matchMedia(
+  (() => {
+    const revealEls = document.querySelectorAll(".reveal");
+    const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
 
     function showAll() {
-      for (var i = 0; i < revealEls.length; i++) {
+      for (let i = 0; i < revealEls.length; i++) {
         revealEls[i].classList.add("is-visible");
       }
     }
@@ -350,9 +349,9 @@ function bootPortfolio() {
       return;
     }
 
-    var observer = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("is-visible");
             observer.unobserve(entry.target);
@@ -362,34 +361,37 @@ function bootPortfolio() {
       { threshold: 0, rootMargin: "0px 0px -10% 0px" },
     );
 
-    for (var j = 0; j < revealEls.length; j++) {
-      observer.observe(revealEls[j]);
+    for (let i = 0; i < revealEls.length; i++) {
+      observer.observe(revealEls[i]);
     }
   })();
 
   /* ---------- LOGO — SCROLL PROGRESS & CLICK SIGNAL ---------- */
-  (function () {
-    var logo = document.getElementById("site-logo");
+  (() => {
+    const logo = document.getElementById("site-logo");
     if (!logo) {
       return;
     }
-    var svg = logo.querySelector(".logo-glyph");
-    var dotPos = logo.querySelector(".logo-dot-pos");
-    var reduceMotion = window.matchMedia(
+    const svg = logo.querySelector(".logo-glyph");
+    const dotPos = logo.querySelector(".logo-dot-pos");
+    if (!svg || !dotPos) {
+      return;
+    }
+    const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
     // 2π × ring radius (15) = 94.25 — shared by the progress arc and the radar ping.
-    var R = 15;
-    var CX = 20;
-    var CY = 20;
+    const R = 15;
+    const CX = 20;
+    const CY = 20;
 
-    var ticking = false;
-    var lastY = window.scrollY;
-    var velocity = 0;
+    let ticking = false;
+    let lastY = window.scrollY;
+    let velocity = 0;
 
     function update() {
-      var max = document.documentElement.scrollHeight - window.innerHeight;
-      var progress =
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const progress =
         max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
       velocity = window.scrollY - lastY;
       lastY = window.scrollY;
@@ -402,7 +404,7 @@ function bootPortfolio() {
       );
 
       // The teal dot orbits the ring from the top, clockwise.
-      var angle = progress * Math.PI * 2 - Math.PI / 2;
+      const angle = progress * Math.PI * 2 - Math.PI / 2;
       if (reduceMotion) {
         // Keep the informative progress arc, but skip the orbiting motion.
         dotPos.setAttribute(
@@ -410,13 +412,13 @@ function bootPortfolio() {
           "translate(" + CX + "," + (CY - R) + ")",
         );
       } else {
-        var x = CX + Math.cos(angle) * R;
-        var y = CY + Math.sin(angle) * R;
+        const x = CX + Math.cos(angle) * R;
+        const y = CY + Math.sin(angle) * R;
         // Squash/stretch the dot with scroll velocity — flick the page hard
         // and the dot wobbles like it's caught in the signal.
-        var wobble = Math.min(1, Math.abs(velocity) / 16);
-        var sy = 1 + wobble * 0.4;
-        var sx = 1 - wobble * 0.22;
+        const wobble = Math.min(1, Math.abs(velocity) / 16);
+        const sy = 1 + wobble * 0.4;
+        const sx = 1 - wobble * 0.22;
         dotPos.setAttribute(
           "transform",
           "translate(" + x + "," + y + ") scale(" + sx + "," + sy + ")",
@@ -440,7 +442,7 @@ function bootPortfolio() {
         logo.classList.remove("burst");
         void logo.offsetWidth;
         logo.classList.add("burst");
-        window.setTimeout(function () {
+        window.setTimeout(() => {
           logo.classList.remove("burst");
         }, 1000);
       }
@@ -453,6 +455,6 @@ function bootPortfolio() {
   })();
 }
 
-requestAnimationFrame(function () {
+requestAnimationFrame(() => {
   requestAnimationFrame(bootPortfolio);
 });
